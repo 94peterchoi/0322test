@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+a:link{text-decoration:none; color:blue}
+a:hover{text-decoration:none; color:red}
+
+/* 모달 창 세로 위치 조정 -> iframe 상태로 불러오면 모달 윗부분이 메뉴바에 가려지기 때문 */
+@media screen {
+	.modal:before {
+		display: inline-block;
+		vertical-align: middle;
+		content: " ";
+		height: 10%;
+	}
+}

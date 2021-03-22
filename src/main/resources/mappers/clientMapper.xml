@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.spring.ball.persistence.ClientDAO">
+	
+	<!-- 회원가입 처리 -->
+	<insert id = "insertClient" parameterType = "com.spring.ball.vo.ClientVO">
+		INSERT INTO guest(id, pwd, name, email, phone, reg_date, email_key) 
+		VALUES(#{id}, #{pwd}, #{name}, #{email}, #{phone}, #{reg_date}, #{email_key})
+	</insert>
+	
+	<!-- 이메일 인증 확인 -->
+	<select id = "selectKey" resultType = "int">
+		SELECT COUNT(*) FROM guest WHERE email_key = #{key}
+	</select>
+	
+	<!-- 이메일 인증 완료 - 사용 가능(Enable : 1) -->
+	<update id = "updateGrade" parameterType="String">
+		UPDATE guest SET enabled=1 WHERE email_key = #{key}
+	</update>
+	
+	<!-- 중복확인 처리 -->
+	<select id = "idCheck" parameterType = "String" resultType = "int">
+		SELECT COUNT(*) FROM guest WHERE id = #{strId}
+	</select>
+
+	<!-- 회원정보 인증 -->
+	<select id = "pwdCheck" resultType = "String">
+		SELECT pwd FROM guest WHERE id = #{strId}
+	</select>
+	
+	<!-- 로그인 처리 -->
+	<select id = "idPwdChk" parameterType = "java.util.Map" resultType = "int">
+		SELECT COUNT(*) FROM guest WHERE id=#{strId} AND pwd=#{strPwd}
+	</select>
+	
+	<!-- 회원정보 삭제 처리 -->
+	<delete id = "deleteClient" parameterType = "String">
+		DELETE guest WHERE id=#{strId}
+	</delete>
+	
+	<!-- 회원정보 상세 페이지 -->
+	<select id = "getClientInfo" parameterType = "String" resultType = "com.spring.ball.vo.ClientVO">
+		SELECT *
+		  FROM guest 
+		 WHERE id=#{strId}
+	</select>
+	
+	<!-- 회원정보 수정 처리 -->
+	<update id = "updateClient" parameterType = "com.spring.ball.vo.ClientVO">
+		UPDATE guest
+		   SET pwd=#{pwd}, 
+		       name=#{name}, 
+		       phone=#{phone}, 
+		       email=#{email}, 
+		 WHERE id=#{id}
+	</update>
+	
+	<select id = "gradeCheck" resultType = "String">
+		SELECT authority FROM guest WHERE id = #{id}
+	</select>
+
+</mapper>  		
